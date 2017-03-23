@@ -13,8 +13,8 @@ Example:
   {% snippet 'snippets/package_item.html', package=c.datasets[0] %}
 
 #}
-{% set truncate = truncate or 180 %}
-{% set truncate_title = truncate_title or 80 %}
+{% set truncate = truncate or 280 %}
+{% set truncate_title = truncate_title or 280 %}
 {% set title = package.title or package.name %}
 {% set notes = h.markdown_extract(package.notes, extract_length=truncate) %}
 
@@ -49,7 +49,7 @@ Example:
     <div class="col-md-2 col-md-offset-1">
         {% if package.organization %}
           <p>Instituci&oacute;n</p>
-          <p class="dependency"><strong>{{package.organization.title}}</strong></p>          
+          <p class="dependency"><strong>{{h.url_for(package.organization.type ~ '_read', action='read', id=package.organization.name)}}</strong></p>
         {% endif %}
         <p>Formato</p>
         {% if package.resources and not hide_resources %}

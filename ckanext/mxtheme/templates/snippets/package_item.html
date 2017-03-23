@@ -49,7 +49,7 @@ Example:
     <div class="col-md-2 col-md-offset-1">
         {% if package.organization %}
           <p>Instituci&oacute;n</p>
-          <p class="dependency"><strong>{{h.url_for(package.organization.type ~ '_read', action='read', id=package.organization.name)}}</strong></p>
+          <p class="dependency"><strong><a href="{{h.url_for(package.organization.type ~ '_read', action='read', id=package.organization.name)}}">package.organization.name</a></strong></p>
         {% endif %}
         <p>Formato</p>
         {% if package.resources and not hide_resources %}

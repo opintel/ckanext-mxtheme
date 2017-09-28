@@ -53,16 +53,16 @@ within_tertiary
             <h4 class="panel-title">
               {% block facet_list_heading %}
                 {% set title = title or h.get_facet_title(name) %}
-                <a data-parent="#filter-by" data-toggle="collapse" href="#item-{{ h.slugify_text(h.get_facet_title(name)) }}" aria-expanded="false" aria-controls="item-{{ h.slugify_text(h.get_facet_title(name)) }}">
+                <a data-parent="#filter-by" data-toggle="collapse" class="collapsed" href="#item-{{ h.slugify_text(h.get_facet_title(name)) }}" aria-expanded="false" aria-controls="item-{{ h.slugify_text(h.get_facet_title(name)) }}">
                   {{ title }}
                 </a>
-                <button type="button" class="collpase-button collapsed" data-parent="#filter-by" data-toggle="collapse" href="#item-{{ h.slugify_text(h.get_facet_title(name)) }}"></button>
+                <button type="button" class="collpase-button collapsed" class="collapsed" data-parent="#filter-by" data-toggle="collapse" href="#item-{{ h.slugify_text(h.get_facet_title(name)) }}"></button>
             {% endblock %}
             </h4>
           </div>
          
           {% block facet_list_items %}
-            <div class="panel-collapse collapse" id="item-{{ h.slugify_text(h.get_facet_title(name)) }}">
+            <div class="collapse" id="item-{{ h.slugify_text(h.get_facet_title(name)) }}">
               <div class="panel-body">
                 {% with items = items or h.get_facet_items_dict(name) %}
                   {% if items %}

@@ -19,6 +19,13 @@ Example:
   {% set text_no_query_none = _('No datasets found') %}
   #}
 
+{% if type == 'harvest' %}
+  {% set text_query = ungettext('{number} harvest source found for "{query}"', '{number} harvest sources found for "{query}"', count) %}
+  {% set text_query_none = _('Sorry no harvest sources found for "{query}"') %}
+  {% set text_no_query = ungettext('{number} harvest source found', '{number} harvest sources found', count) %}
+  {% set text_no_query_none = _('Sorry no harvest sources found') %}
+{%- endif -%}
+
 {% if type == 'group' %}
   {% set text_query = ungettext('{number} group found for "{query}"', '{number} groups found for "{query}"', count) %}
   {% set text_query_none = _('No groups found for "{query}"') %}
@@ -31,7 +38,6 @@ Example:
   {% set text_no_query = ungettext('{number} institución encontrada', '{number} instituciones encontradas', count) %}
   {% set text_no_query_none = 'No existen instituciones' %}
 {%- endif -%}
-
 
 {% if type != 'dataset' %}
   {% if query %}
@@ -48,6 +54,6 @@ Example:
     {%- endif -%}
   {%- endif -%}
 {% else %}
-  16,500 Datos en datos.gob.mx
+  <span class="counter-datos-ds"></span> Datos en datos.gob.mx
 {% endif %}
 

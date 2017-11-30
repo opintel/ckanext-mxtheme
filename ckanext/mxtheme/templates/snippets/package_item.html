@@ -13,23 +13,29 @@ Example:
   {% snippet 'snippets/package_item.html', package=c.datasets[0] %}
 
 #}
-{% set truncate = truncate or 180 %}
-{% set truncate_title = truncate_title or 80 %}
+{% set truncate = truncate or 280 %}
+{% set truncate_title = truncate_title or 280 %}
 {% set title = package.title or package.name %}
 {% set notes = h.markdown_extract(package.notes, extract_length=truncate) %}
 
 <div class="dataset-item row {{ item_class or "dataset-item" }}">
   {% block package_item_content %}
-    
+
   {% endblock %}
-    <div class="col-md-9">
-        <p class="dataset-date"><span class="tag-icon tag-geoespacial"></span><span>Actualización: <strong>{{h.format_display_date(package.metadata_modified, format_date='%Y/%m/%d')}}</strong></span></p>
-        <h3>{% if package.private %}
+    <div class="col-md-10">
+        <!-- {% if package.metadata_modified %}
+        <p class="dataset-date">
+          {#<span>Actualización: <strong>{{h.format_display_date(package.metadata_modified, format_date='%Y/%m/%d')}}</strong></span>#}
+        </p>
+        {% endif %} -->
+        <h3>
+          <span class="tag-icon tag-geoespacial"></span>
+          {% if package.private %}
           <span class="dataset-private label label-inverse">
             <i class="icon-lock"></i>
             {{ _('Private') }}
           </span>
-        {% endif %}
+          {% endif %}
         {{ h.link_to(h.truncate(title, truncate_title), h.url_for(controller='package', action='read', id=package.name)) }}
         {% if package.get('state', '').startswith('draft') %}
           <span class="label label-info">{{ _('Draft') }}</span>
@@ -46,13 +52,20 @@ Example:
         {% endif %}
     </div>
 
-    <div class="col-md-2 col-md-offset-1">
+    <div class="col-md-2">
         {% if package.organization %}
-          <p>Instituci&oacute;n</p>
-          <p class="dependency"><strong>{{package.organization.title}}</strong></p>          
+          <div class="dependency">
+            <strong>
+              <a href="{{h.url_for(package.organization.type ~ '_read', action='read', id=package.organization.name)}}">{{package.organization.name}}
+              </a>
+            </strong>
+            <!-- {% if package.organization.description != '' and package.organization.description != None %}
+              <span class="tooltiptext">{{h.truncate(package.organization.description, 60)}}</span>
+            {% endif %} -->
+          </div>
         {% endif %}
-        <p>Formato</p>
         {% if package.resources and not hide_resources %}
+          <div class="dataset-format-container">
             {% for resource in h.dict_list_reduce(package.resources, 'format') %}
               <span class="dataset-format" data-format="{% if h.is_regular_format(resource.lower()) %}{{resource}}{% else %}OTHER{% endif %}">{{ resource }}</span>
               {#
@@ -61,6 +74,7 @@ Example:
               </li>
               #}
             {% endfor %}
+          </div>
         {% endif %}
     </div>
 </div>

@@ -22,15 +22,15 @@
                         <div class="col-md-7">
                             <ul class="breadcrumb">
                               {% snippet 'snippets/home_breadcrumb_item.html' %}
-                              {% block breadcrumb_content %}{% endblock %} 
+                              {% block breadcrumb_content %}{% endblock %}
                             </ul>
                         </div>
-                        {# 
+                        {#
                        <ol class="breadcrumb">
                          {% snippet 'snippets/home_breadcrumb_item.html' %}
                          {% block breadcrumb_content %}{% endblock %}
                        </ol>
-                        #}                   
+                        #}
                      {% endif %}
                     {% endblock %}
                      <div class="col-md-5">
@@ -38,6 +38,7 @@
                             <li><a href="/busca/dataset">Todos los datos</a></li>
                             <li><a href="/busca/organization">Instituciones</a></li>
                             <li><a href="/busca/group">Grupos</a></li>
+                            <li><a href="https://datos.gob.mx/idmx">IDMX</a></li>
                         </ul>
                      </div>
                   </div>
@@ -52,14 +53,14 @@
                         <div id="main-container">
                             <div class="row">
                                 {% block secondary %}
-                                    <div id="sidebar" class="col-md-3">
+                                    <div id="sidebar" class="col-md-3 col-sm-3">
                                         {% block secondary_content %}{% endblock %}
                                     </div>
                                 {% endblock %}
-                                
+
                                 {% block pre_primary %}{% endblock %}
 
-                                <div id="content" class="col-md-9">
+                                <div id="content" class="col-md-9 col-sm-9">
                                     {% block primary %}
                                         {% block primary_content %}
                                             {% block page_header %}
@@ -70,7 +71,7 @@
                                                   </div>
                                                 {% endif %}
                                                 <ul class="nav nav-tabs">
-                                                  {% block content_primary_nav %}{% endblock %}                                                  
+                                                  {% block content_primary_nav %}{% endblock %}
                                                 </ul>
                                               </header>
                                             {% endblock %}

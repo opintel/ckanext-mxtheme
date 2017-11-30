@@ -54,20 +54,63 @@
         {% if h.check_access('package_update',{'id':pkg_dict.id}) %}
           <tr>
             <td scope="row" class="dataset-label">{{ _("State") }}</td>
-            <td class="dataset-details">{{ pkg_dict.state }}</td>
+            <td class="dataset-details">
+              {% if value == 'active' or 'Active' %}
+                Activo
+              {% else %}
+                {{ _(pkg_dict.state) }}
+              {% endif %}
+            </td>
           </tr>
         {% endif %}
 
       {% block extras scoped %}
-        {% for extra in h.sorted_extras(pkg_dict.extras) %}
+        {% for extra in h.sorted_extras_dgm(pkg_dict.extras) %}
           {% set key, value = extra %}
-          <tr rel="dc:relation" resource="_:extra{{ i }}">
-            <td scope="row" class="dataset-label" property="rdfs:label">{{ _(key) }}</td>
-            <td class="dataset-details" property="rdf:value">{{ value }}</td>
+          {#{% if key != 'Final del periodo temporal' and key != 'Inicio del periodo temporal'%}#}
+          <tr rel="dc:relation" resource="_:extra{{ i }}" style="{% if not value %}display: none;{% endif %}">
+            <td scope="row" class="dataset-label" property="rdfs:label">
+              {% if key == 'dataDictionary' %}
+                Diccionario de Datos
+              {% elif key == 'quality' %}
+                Calidad de Datos
+              {% elif key == 'spatial_text' %}
+                Espacio geogr&aacute;fico
+              {% elif key == 'dcat_issued' %}
+                Creado
+              {% elif key == 'dcat_modified' %}
+                Ultima modificación
+              {% elif key == 'dcat_publisher_email' %}
+                Email del publicador
+              {% elif key == 'dcat_publisher_name' %}
+                Nombre del publicador
+              {% elif key == 'harvest_object_id' %}
+                Id del Harvest
+              {% elif key == 'harvest_source_id' %}
+                Fuente del Harvest
+              {% elif key == 'harvest_source_title' %}
+                Nombre del Harvest
+              {% elif key == 'language' %}
+                Lenguaje
+              {% else %}
+                {{ _(key) }}
+              {% endif %}
+            </td>
+            <td class="dataset-details" property="rdf:value">
+              {% if key == 'state' or key == 'State' or _(key) == 'Estado' %}
+                {% if value == 'active' or 'Active' %}
+                  Activo
+                {% endif %}
+              {% elif key == 'dataDictionary' or key == 'quality' %}
+                <a href="{{value}}">{{value}}</a>
+              {% else %}
+                {{ value }}
+              {% endif %}
+            </td>
           </tr>
+          {#{% endif %}#}
         {% endfor %}
       {% endblock %}
-
       {% endblock %}
     </tbody>
   </table>

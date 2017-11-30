@@ -28,6 +28,13 @@
   <div class="col-md-3">
     <ul class="dropdown-container">
       {% block resource_item_explore_links %}
+      <div class="row">
+        <a href="{{ res.url }}" class="btn btn-primary" style="width: 150px; margin-top: 10px; text-align: center; padding-left: 0; padding-right: 0;" data-id="{{ res.id }}" data-name="{{ res.name }}" data-slug="{{h.slugify_text(res.name)}}" onclick="registerDownload(this)">{{ _('Download') }}</a>
+      </div>      
+      <div class="row">
+        <a href="{{ url }}" class="btn btn-primary" style="width: 150px; text-align: center; padding-left: 0; padding-right: 0; margin-top: 5px;">{{ _('More information') }}</a>
+      </div>
+      {# 
       <li class="btn btn-primary dropdown">
         <a href="{{ url }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
           Previsualizar<span class="caret"></span></a>
@@ -66,6 +73,7 @@
             {% endif %}
           </ul>
       </li>      
+       #}
       {% endblock %}
     </ul>
   </div>

@@ -4,29 +4,38 @@
 
 {% block head_extras -%}
   {{ super() }}
-  {% set description = h.markdown_extract(h.get_translated(res, 'description'), extract_length=200) if res.description else h.markdown_extract(h.get_translated(c.package, 'notes'), extract_length=200) %}
+  {% set description = h.markdown_extract(res.description, extract_length=200) if res.description else h.markdown_extract(c.package.notes, extract_length=200) %}
   <meta property="og:title" content="{{ h.dataset_display_name(c.package) }} - {{ h.resource_display_name(res) }} - {{ g.site_title }}">
   <meta property="og:description" content="{{ description|forceescape }}">
 {% endblock -%}
 
-{% block subtitle %}{{ h.dataset_display_name(c.package) }} - {{ h.resource_display_name(res) }}{% endblock %}
+{% block subtitle %} {{ h.dataset_display_name(c.package) }} - {{ h.resource_display_name(res) }}{% endblock %}
 
 {% block breadcrumb_content_selected %}{% endblock %}
 
 {% block breadcrumb_content %}
   {{ super() }}
-  <li class="active"><a href="">{{ h.resource_display_name(res)|truncate(30) }}</a></li>
+  {# <li class="active"><a href="">{{ h.resource_display_name(res)|truncate(40) }}</a></li> #}
+{% endblock %}
+
+{% block extra_js %}
+  <script type="text/javascript">
+    function registerDownload(event){
+      ga('send', { 'hitType': 'pageview', 'page': '/busca/organization/{{h.slugify_text(c.package.organization.name)}}/dataset/{{h.slugify_text(c.package.name)}}/resource/{{ h.slugify_text(h.resource_display_name(res)) }}/download', 'title': 'Download: {{ h.resource_display_name(res) | truncate(150) }}' });
+      return true;
+    }
+  </script>
 {% endblock %}
 
 {% block pre_primary %}
   {% block resource %}
     <div id="content" class="col-md-12 no-border details">
         {% block resource_read_title %}
-            <h1>{{ h.resource_display_name(res) | truncate(50) }}</h1>
+            <h1>{{ h.resource_display_name(res) | truncate(150) }}</h1>
         {% endblock %}
         {% block resource_read_url %}
             {% if res.url and h.is_url(res.url) %}
-                <p>{{ _('URL:') }} <a href="{{ res.url }}" title="{{ res.url }}">{{ res.url }}</a></p>
+                <a href="{{ res.url }}" class="btn btn-primary" onclick="registerDownload('')" style="padding-right: 10px;" title="{{ res.url }}">Descargar</a>
             {% elif res.url %}
                 <p>{{ _('URL:') }} {{ res.url }}</p>
             {% endif %}
@@ -39,10 +48,10 @@
           <blockquote>{{ h.markdown_extract(h.get_translated(c.package, 'notes')) }}</blockquote>
           <p>{% trans dataset=c.package.title, url=h.url_for(controller='package', action='read', id=c.package['name']) %}Source: <a href="{{ url }}">{{ dataset }}</a>{% endtrans %}
         {% endif %}
-        
+
       {% block data_preview %}
       {% block resource_view %}
-      
+
         {% block resource_view_nav %}
           {% set resource_preview = h.resource_preview(c.resource, c.package) %}
           {% snippet "package/snippets/resource_views_list.html",
@@ -101,7 +110,75 @@
           {% endblock %}
        {% endblock %}
        {% endblock %}
+       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+            <script type="text/javascript">
+              $(document).ready(function(){
+                // hide elements
+                // Inyeccion de metadatos Adela (TEMPORALMENTE)
+                 var xhr;
+                 if (window.XMLHttpRequest) xhr = new XMLHttpRequest();
+                 else xhr = new ActiveXObject("Microsoft.XMLHTTP");
 
+                 xhr.open('GET', '{{h.get_adela_endpoint()}}/{{h.slugify_text(h.resource_display_name(res))}}', false);
+                 xhr.onreadystatechange = function () {
+                     if (xhr.readyState===4 && xhr.status===200) {
+                        var items = JSON.parse(xhr.responseText).distribution;
+                        if(items.dataset){
+                          document.getElementById('accrualPeriodicity').innerHTML = items.dataset.accrualPeriodicity;
+                          $(".accrualPeriodicity").show();
+                          $("#th_accrualPeriodicity").show();
+                        }
+                        if(items.temporal){
+                          document.getElementById('temporal').innerHTML = items.temporal;
+                          $(".temporal").show();
+                          $("#th_temporal").show();
+                        }
+                        if(items.codelist){
+                          document.getElementById('codelist').innerHTML = items.codelist;
+                          $(".codelist").show();
+                          $("#th_codelist").show();
+                        }
+                        if(items.codelist_link){
+                          document.getElementById('codelist_link').innerHTML = items.codelist_link;
+                          $(".codelist_link").show();
+                          $("#th_codelist_link").show();
+                        }
+                        if(items.visualization){
+                          document.getElementById('visualization').innerHTML = items.visualization;
+                          $(".visualization").show();
+                          $("#th_visualization").show();
+                        }
+                        if(items.spatial){
+                          document.getElementById('spatial').innerHTML = items.spatial;
+                          $(".spatial").show();
+                          $("#th_spatial").show();
+                        }
+                        if(items.copyright){
+                          document.getElementById('copyright').innerHTML = items.copyright;
+                          $(".copyright").show();
+                          $("#th_copyright").show();
+                        }
+                        if(items.adela_created){
+                          document.getElementById('adela_created').innerHTML = items.adela_created;
+                          $(".adela_created").show();
+                          $("#th_adela_created").show();
+                        }
+                        if(items.adela_modified){
+                          document.getElementById('adela_modified').innerHTML = items.adela_modified;
+                          $(".adela_modified").show();
+                          $("#th_adela_modified").show();
+                        }
+                     }
+                 }
+
+                $(".toggle-show-more").remove();
+                $(".toggle-seperator").remove();
+
+                 xhr.send();
+              });
+
+               //$(document).ready( function () { xhr.send(); });
+              </script>
            <div id="additionals" class="row">
                 <div id="sidebar" class="col-md-3">
                     {% block resources_list %}
@@ -129,12 +206,24 @@
                                 <tbody>
                                   <tr>
                                     <th scope="row">{{ _('Last updated') }}</th>
-                                    <td>{{ h.render_datetime(res.last_modified) or h.render_datetime(res.revision_timestamp) or h.render_datetime(res.created) or _('unknown') }}</td>
+                                    <td>
+                                      {% if h.render_datetime(res.last_modified) or h.render_datetime(res.revision_timestamp) or h.render_datetime(res.created) %}
+                                        {{ h.render_datetime(res.last_modified) or h.render_datetime(res.revision_timestamp) or h.render_datetime(res.created)}}
+                                      {% else %}
+                                        {% for key, value in h.format_resource_items(res.items()) %}
+                                          {% if key == 'Creado' or key == 'created' or key == 'Created' %}
+                                            {{ _(value) }}
+                                          {% endif %}
+                                        {% endfor %}
+                                      {% endif %}
+                                    </td>
                                   </tr>
+                                  {% if res.created %}
                                   <tr>
                                     <th scope="row">{{ _('Created') }}</th>
                                     <td>{{ h.render_datetime(res.created) or _('unknown') }}</td>
                                   </tr>
+                                  {% endif %}
                                   <tr>
                                     <th scope="row">{{ _('Format') }}</th>
                                     <td>{{ res.mimetype_inner or res.mimetype or res.format or _('unknown') }}</td>
@@ -144,7 +233,90 @@
                                     <td>{% snippet "snippets/license.html", pkg_dict=pkg, text_only=True %}</td>
                                   </tr>
                                   {% for key, value in h.format_resource_items(res.items()) %}
-                                    <tr class="toggle-more"><th scope="row">{{ key }}</th><td>{{ value }}</td></tr>
+                                    {% if key != 'format' and key != 'size' and key != 'package id' and key != 'revision id' and key != 'id' and key != 'Creado' and key != 'resource group id' %}
+                                      <tr class="toggle-more">
+                                        {# Esto no va a ser necesario cuando tengamos el idioma actualizado #}
+                                        <th scope="row">
+                                          {% if key == 'position' %}
+                                          Posici&oacute;n
+                                          {% elif key == 'state' %}
+                                          Estado
+                                          {% elif key == 'has views' %}
+                                          Visitas
+                                          {% elif key == 'datastore active' %}
+                                          DataStore Activo
+                                          {% else %}
+                                          {{ _(key) }}
+                                          {% endif %}
+                                        </th>
+                                        <td>
+                                          {% if key == 'state' %}
+                                            {% if value == 'active' or 'Active' %}
+                                              Activo
+                                            {% endif %}
+                                          {% else %}
+                                            {{ _(value) }}
+                                          {% endif %}
+                                        </td>
+                                      </tr>
+                                    {% endif %}
+                                  {% endfor %}
+                                  <tr class="adela_modified" style="display: none;">
+                                      <th id="th_adela_modified" scope="row">{{ _('Fecha de última modificación de datos') }}</th>
+                                      <td id="adela_modified"></td>
+                                  </tr>
+                                  <tr class="adela_created" style="display: none;">
+                                      <th id="th_adela_created" scope="row">{{ _('Fecha de creación') }}</th>
+                                    <td id="adela_created"></td>
+                                  </tr>
+                                  <tr class="accrualPeriodicity" style="display: none;">
+                                    <th id="th_accrualPeriodicity" scope="row">{{ _('Periodo de actualización') }}</th>
+                                    <td id="accrualPeriodicity"></td>
+                                  </tr>
+                                  <tr class="temporal" style="display: none;">
+                                    <th id="th_temporal" scope="row">{{ _('Periodo cubierto por los datos') }}</th>
+                                    <td id="temporal"></td>
+                                  </tr>
+                                  <tr class="codelist" style="display: none;">
+                                    <th id="th_codelist" scope="row">{{ _('Codelist') }}</th>
+                                    <td id="codelist"></td>
+                                  </tr>
+                                  <tr class="codelist_link" style="display: none;">
+                                    <th id="th_codelist_link" scope="row">{{ _('Codelist Link') }}</th>
+                                    <td id="codelist_link"></td>
+                                  </tr>
+                                  <tr class="visualization" style="display: none;">
+                                    <th id="th_visualization" scope="row">{{ _('Herramienta de visualización') }}</th>
+                                    <td id="visualization"></td>
+                                  </tr>
+                                  <tr class="copyright" style="display: none;">
+                                    <th id="th_copyright" scope="row">{{ _('Copyright') }}</th>
+                                    <td id="copyright"></td>
+                                  </tr>
+                                  <tr class="spatial" style="display: none;">
+                                    <th id="th_spatial" scope="row">{{ _('Espacio geográfico') }}</th>
+                                    <td id="spatial"></td>
+                                  </tr>
+                                  {% for key, value in h.format_resource_items(res.items()) %}
+                                    {% if key == 'package id' or key == 'revision id' or key == 'id' or key == 'resource group id' %}
+                                      <tr class="toggle-more">
+                                        {# Esto no va a ser necesario cuando tengamos el idioma actualizado #}
+                                        <th scope="row">
+                                          {% if key == 'package id' %}
+                                          Id del Paquete
+                                          {% elif key == 'revision id' %}
+                                          Id de Revisi&oacute;n
+                                          {% elif key == 'id' %}
+                                          Id
+                                          {% elif key == 'resource group id' %}
+                                          Id del Grupo de Recursos
+                                          {% endif %}
+                                        </th>
+                                        <td>
+                                          {{ _(value) }}
+                                        </td>
+                                      </tr>
+                                    {% endif %}
                                   {% endfor %}
                                 </tbody>
                               </table>
@@ -155,7 +327,7 @@
                       {% endblock %}
                 </div>
            </div>
-       </div> 
+       </div>
     {% endblock %}
 {% endblock %}
 

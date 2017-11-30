@@ -1,4 +1,4 @@
-/*!
+  /*!
  * Bootstrap v3.3.6 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
@@ -6821,13 +6821,15 @@ li > a:hover {
 #sidebar ul > li > a {
   font-size: 12px;
   font-weight: 400;
-  line-height: 35px;
+  line-height: 20px;
   color: #696969;
 }
-#sidebar ul > li.active > a,
-#sidebar ul > li > a:hover {
+
+/*#sidebar ul > li > a:hover {*/
+#sidebar ul > li.active > a{
   color: #0c9;
 }
+
 #search-form .search-keyword .glyphicon {
   font-size: 16px;
   color: #d8d8d8;
@@ -6856,7 +6858,9 @@ li > a:hover {
 .dataset-item .dataset-date {
   font-size: 11px;
   font-weight: 300;
-  color: #9b9b9b;
+  color: red;
+  margin-bottom: 15px;
+  margin-top: 10px;
 }
 .dataset-item .dataset-date > span > strong {
   font-weight: 300;
@@ -6866,10 +6870,31 @@ li > a:hover {
   font-size: 15px;
   font-weight: 600;
   color: #474747;
+  overflow: hidden;
 }
 .dataset-item h3 > a {
+  display: inline-block;
   color: #474747;
+  font-size: 15px;
+  font-weight: 600;
+  position: relative;
+  float: left;
+  margin-top: -34px;
 }
+
+@media screen and (max-width: 675px) {
+  .dataset-item h3 > a {
+    margin-top: -30px;
+    padding-left: 40px;
+  }
+}
+@media screen and (min-width: 676px) {
+  .dataset-item h3 > a {
+    margin-top: 0;
+    padding-left: 10px;
+  }
+}
+
 .dataset-item h3 > a:hover {
   font-weight: 700;
 }
@@ -7248,7 +7273,7 @@ h1:after {
 .dataset-item,
 .result-item {
   margin-bottom: 20px;
-  padding: 15px 10px;
+  padding:10px;
   background-color: #f9f9f9;
   border: 1px solid #f6f6f6;
   border-radius: 5px;
@@ -7274,16 +7299,21 @@ h1:after {
   left: 0;
 }
 .dataset-item h3,
-.dataset-item p.dependency {
-  margin-bottom: 20px;
+.dataset-item .dependency {
+  margin-top: 10px;
 }
+
+.dependency {
+  text-transform: uppercase;
+}
+
 .dataset-item h4 {
   margin-top: 0;
   margin-bottom: 10px;
 }
 
 .result-item {
-  height: 350px;
+  height: auto;
 }
 .result-item > a {
   display: inline-block;
@@ -7308,6 +7338,10 @@ h1:after {
 .tags-list > li > a {
   display: block;
 }
+.dataset-format-container{
+  margin-top: 20px;
+}
+
 .dataset-format {
   font-size: 10px;
   font-weight: 700;
@@ -7386,7 +7420,9 @@ h1:after {
   background-position: 50%;
   background-size: 50%;
   border-radius: 15px;
+  float: left;
 }
+
 .tag-icon.tag-cultura-y-turismo {
   background-image: url(https://cdn.datos.gob.mx/ckan/img/ic-cultura-y-turismo.3d691d9c.png);
 }
@@ -7541,4 +7577,56 @@ h1:after {
           box-shadow: 1px 0 0 0 #d8d8d8 inset;
   position: relative;
   z-index: 1;
+}
+.search-form.btn {
+  position: relative;
+  top: -2px;
+}
+
+.js-hide {
+  display: none;
+}
+
+.js .js-hide.active {
+  display: block;
+}
+
+.tooltip2 {
+    position: relative;
+    display: inline-block;
+    /*border-bottom: 1px dotted black;  If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip2 .tooltiptext {
+    visibility: hidden;
+    width: 205px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip2:hover .tooltiptext {
+    visibility: visible;
+}
+.navbar.dgm-navbar ul.navbar-nav.dgm-navbar > li.dgm-navbar > a.dgm-navbar { font-weight: 300; }
+
+
+/* Cambios para el ancho de los breadcrumbs */
+.submenu.recortado {
+  margin-right: 0px !important;
+  padding-right: 0px !important;
+  margin-left: 0px !important;
+  padding-left: 0px !important;
+  float: unset !important;
+}
+.submenu.recortado li {
+  margin-right: 12px !important;
 }

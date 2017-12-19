@@ -22,7 +22,7 @@ Example:
   {% block package_item_content %}
 
   {% endblock %}
-    <div class="col-md-10">
+    <div class="col-md-10 col-sm-10 col-xs-12">
         <!-- {% if package.metadata_modified %}
         <p class="dataset-date">
           {#<span>Actualización: <strong>{{h.format_display_date(package.metadata_modified, format_date='%Y/%m/%d')}}</strong></span>#}
@@ -52,11 +52,11 @@ Example:
         {% endif %}
     </div>
 
-    <div class="col-md-2">
+    <div class="col-md-2 col-sm-2 col-xs-12">
         {% if package.organization %}
           <div class="dependency">
             <strong>
-              <a href="{{h.url_for(package.organization.type ~ '_read', action='read', id=package.organization.name)}}">{{package.organization.name}}
+              <a href="{{h.url_for(package.organization.type ~ '_read', action='read', id=package.organization.name)}}">{{ h.get_clear_organization_name(package.organization.name) }}
               </a>
             </strong>
             <!-- {% if package.organization.description != '' and package.organization.description != None %}

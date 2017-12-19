@@ -4,6 +4,8 @@ import i18n
 import logging
 import datetime
 import urlparse
+##### STRING
+import string
 
 import ckan.exceptions
 import ckan.plugins as plugins
@@ -176,6 +178,13 @@ def get_grafica_base_url():
     url_grafica_base = os.environ.get("GRAFICA_BASE_URL", "https://cdn.datos.gob.mx/assets/css/main.css")
     return url_grafica_base
 
+def get_clear_organization_name(name):
+    if (string.find(name, '-') > 0):
+        name = name.replace('-',' ');
+        name = name.title()
+    else:
+        name = name.upper()
+    return name
 
 def sorted_extras_dgm(extras):
     sorted_list = sorted_extras(extras)
@@ -231,5 +240,6 @@ class MxthemePlugin(plugins.SingletonPlugin):
             'slugify_text': slugify_name,
             'get_adela_endpoint': get_adela_endpoint,
             'sorted_extras_dgm': sorted_extras_dgm,
-            'get_grafica_base_url': get_grafica_base_url
+            'get_grafica_base_url': get_grafica_base_url,
+            'get_clear_organization_name': get_clear_organization_name
         }

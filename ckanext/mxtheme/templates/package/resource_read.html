@@ -116,8 +116,32 @@
           {% endblock %}
        {% endblock %}
        {% endblock %}
-           <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-           <script type="text/javascript">
+
+       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+       <script type="text/javascript">
+         $(document).ready(function() {
+           $('.tab-content').hide();
+           $('.nav-tabs-plain').hide();
+           var notFormatValid= $('.data-viewer-info');
+           if (notFormatValid.length > 0) {
+             $('.tab-content').show();
+           } else {
+             setTimeout(function(){
+               var hide = $('.recline-data-explorer');
+               if(hide.length > 0) {
+                 $('.tab-content').show();
+                 $('.nav-tabs-plain').show();
+               } else {
+                 setTimeout(function(){
+    	             var errorText= $('#data-view-error').text();
+                   $('.tab-content').show();
+                 }, 6000);
+               };
+             }, 5000);
+           };
+         });
+       </script>
+            <script type="text/javascript">
               $(document).ready(function(){
                 // Inyeccion de metadatos Adela (TEMPORALMENTE)
                   var xhr;

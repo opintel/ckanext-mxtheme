@@ -77,7 +77,7 @@ within_tertiary
                   {% if h.get_param_int('_%s_limit' % name) %}
                     {% if h.has_more_facets(name) %}
                       <li class="list-group-item ckan-group-item">
-                        <!-- <a href="{{ h.remove_url_param('_%s_limit' % name, replace=0, extras=extras, alternative_url=alternative_url) }}" class="read-more"><strong>{{ _('Show More {facet_type}').format(facet_type=title) }}</strong></a> -->
+                        <a href="{{ h.remove_url_param('_%s_limit' % name, replace=0, extras=extras, alternative_url=alternative_url) }}" class="read-more"><strong>{{ _('Show More {facet_type}').format(facet_type=title) }}</strong></a>
                       </li>
                     {% endif %}
                   {% else %}

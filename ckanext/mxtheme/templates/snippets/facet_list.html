@@ -49,7 +49,18 @@ within_tertiary
       {% endif %}
  
       {% block facet_list_item %}
-       
+        <!-- Open Facets -->
+          {% block facet_list_heading %}
+            {% set title = title or h.get_facet_title(name) %}
+            <a href="#item-{{ h.slugify_text(title) }}" class="module-heading list-group-item ckan-group-item ckan-header-group" data-toggle="collapse">
+              {{ title }}
+                <i class="glyphicon glyphicon-chevron-down" style="float: right"></i>
+            </a>
+          {% endblock %}
+          {% block facet_list_items %}
+            
+          {% endblock %}
+
       {% endblock %}
     {% endif %}
   {% endwith %}

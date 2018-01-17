@@ -72,9 +72,12 @@
 
 {% block secondary_content %}
   <h3>Filtrar por</h3>
+  {% set licencias = 'Licencias' %}
+  {% set categorias = 'Categorias' %}
+
   {% for facet in c.facet_titles %}
-    {% if c.facet_titles[facet] is not 'Licencias'%}
-      {% if c.facet_titles[facet] == 'Categorias' %}
+    {% if c.facet_titles[facet] is not licencias %}
+      {% if c.facet_titles[facet] is categorias %}
         {{ h.snippet('snippets/facet_list.html', title='Categorías', name=facet) }}
       {% else %}
         {{ h.snippet('snippets/facet_list.html', title=c.facet_titles[facet], name=facet) }}

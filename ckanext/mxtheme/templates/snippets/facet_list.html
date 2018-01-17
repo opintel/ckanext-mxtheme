@@ -74,14 +74,6 @@ within_tertiary
                     </li>
                 {% endfor %}
 
-              </ul>
-              </div>
-          {% else %}
-            <div class="list-group collapse" id="item-{{h.slugify_text(h.get_facet_title(name))}}">
-              <ul class="filters-menu">
-                <li class="list-group-item ckan-group-item">{{ _('There are no {facet_type} that match this search').format(facet_type=title) }}</li>
-              </ul>
-            </div>
           {% endif %}
           {% endwith %}
           {% endblock %}

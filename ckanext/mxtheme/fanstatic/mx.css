@@ -6627,7 +6627,7 @@ li > a:hover {
 
 @media screen and (max-width: 675px) {
   .dataset-item h3 > a {
-    margin-top: -30px;
+    margin-top: -20px;
     padding-left: 40px;
   }
 }
@@ -7047,10 +7047,7 @@ h1:after {
 .dataset-item h3,
 .dataset-item .dependency {
   margin-top: 10px;
-}
-
-.dependency {
-  text-transform: uppercase;
+  width: fit-content;
 }
 
 .dataset-item h4 {
@@ -7058,9 +7055,9 @@ h1:after {
   margin-bottom: 10px;
 }
 
-.result-item {
+/*.result-item {
   height: auto;
-}
+}*/
 .result-item > a {
   display: inline-block;
   margin: 20px auto 30px;
@@ -7386,3 +7383,42 @@ h1:after {
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus { background: none !important; }
 .nav-tabs>li>a { background: none !important; }
+
+/* Institucion Stilos */
+
+.institution-item {
+  text-align: center;
+}
+.institution-item > p {
+  font-weight: 300;
+  text-align: left;
+}
+.institution-item > p > a {
+  color: #595959;
+}
+.institution-item > p.datasets {
+  font-size: 12px;
+  font-weight: 400;
+  color: #4a4a4a;
+}
+
+.institution-item {
+  margin-bottom: 20px;
+  padding: 15px 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #f6f6f6;
+  border-radius: 5px;
+}
+
+.institution-card {
+  height: 380px;
+}
+
+.group-card {
+  height: 320px;
+}
+
+.institution-item > a {
+  display: inline-block;
+  margin: 20px auto 30px;
+}

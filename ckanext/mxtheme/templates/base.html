@@ -57,9 +57,9 @@
     {% block links %}
       <link rel="shortcut icon" href="https://datos.gob.mx/img/favicon.ico" />
       {#<link rel="stylesheet" type="text/css" href="">   #}
-      <link rel="import" href="https://cdn.datos.gob.mx/bower_components/polymer/polymer.html">
-      <link rel="import" href="https://cdn.datos.gob.mx/bower_components/dgm-navbar/dgm-navbar.html">
-      <link rel="import" href="https://cdn.datos.gob.mx/bower_components/dgm-footer/dgm-footer.html">
+      <link rel="import" href="{{ h.get_cdn_url() }}polymer/polymer.html">
+      <link rel="import" href="{{ h.get_cdn_url() }}dgm-navbar/dgm-navbar.html">
+      <link rel="import" href="{{ h.get_cdn_url() }}dgm-footer/dgm-footer.html">
     {% endblock %}
 
     {#
@@ -76,7 +76,7 @@
     #}
     {% block styles %}
 
-        <link rel="stylesheet" type="text/css" href="{{h.get_grafica_base_url()}}">
+        <link rel="stylesheet" type="text/css" href="{{ h.get_grafica_base_url() }}">
         <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         {% resource 'mxtheme/mx.css' %}
 

@@ -15,7 +15,7 @@ Example:
 {% set url = h.url_for(type ~ '_read', action='read', id=group.name) %}
 
 <div class="col-md-4">
-    <div class="institution-item result-item">
+    <div class="group-card result-item">
         {% block image %}
         <a href="{{ url }}" style="display: block !important;"><img src="{{ group.image_display_url or h.url_for_static('/base/images/placeholder-group.png') }}" alt="{{ group.name }}"></a>
         {% endblock %}

@@ -13,12 +13,12 @@ Example:
 #}
 {% set url = h.url_for(organization.type ~ '_read', action='read', id=organization.name) %}
 <div class="col-md-4">
-    <div class="institution-item result-item">
+    <div class="institution-card result-item">
         {% block image %}
-            <a href="{{ url }}" style="display: block !important; height: 215px !important;"><img src="{{ organization.image_display_url or h.url_for_static('/base/images/placeholder-organization.png') }}" alt="{{ organization.name }}" ></a>
+            <a href="{{ url }}" style="display: block !important; height: 150px !important;"><img src="{{ organization.image_display_url or h.url_for_static('/base/images/placeholder-organization.png') }}" alt="{{ organization.name }}" ></a>
         {% endblock %}
         {% block title %}
-            <p><a href="{{ url }}"><strong>{{ organization.display_name }}</strong></a></p>         
+            <p><a href="{{ url }}"><strong>{{ organization.display_name }}</strong></a></p>
         {% endblock %}
 
         {% block description %}
@@ -26,7 +26,7 @@ Example:
                 <p><a href="{{ url }}">{{ h.markdown_extract(organization.description, extract_length=80) }}</a></p>
             {% endif %}
         {% endblock %}
-        
+
         {% block datasets %}
             {% if organization.package_count != 0 %}
               <p class="datasets">{{organization.package_count}} Datos</p>

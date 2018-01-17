@@ -58,23 +58,42 @@ within_tertiary
             </a>
           {% endblock %}
           {% block facet_list_items %}
-          {% with items = items or h.get_facet_items_dict(name) %}
-          {% if items %}
-              <div class="list-group collapse" id="item-{{h.slugify_text(title)}}">
-              <ul class="filters-menu">
-                {% for item in items %}
-                    {% set href = h.remove_url_param(name, item.name, extras=extras, alternative_url=alternative_url) if item.active else h.add_url_param(new_params={name: item.name}, extras=extras, alternative_url=alternative_url) %}
-                    {% set label = label_function(item) if label_function else item.display_name %}
-                    {% set label_truncated = h.truncate(label, 22) if not label_function else label %}
-                    {% set count = count_label(item['count']) if count_label else ('(%d)' % item['count']) %}
-                    <li class="{% if item.active %} active{% endif %} list-group-item ckan-group-item">
-                      <a href="{{ href }}" title="{{ label if label != label else '' }}">
-                        {{ label }} {{ count }}
-                      </a>
-                    </li>
-                {% endfor %}
+            {% with items = items or h.get_facet_items_dict(name) %}
+              {% if items %}
+                <div class="list-group collapse" id="item-{{h.slugify_text(title)}}">
+                <ul class="filters-menu">
+                  {% for item in items %}
+                      {% set href = h.remove_url_param(name, item.name, extras=extras, alternative_url=alternative_url) if item.active else h.add_url_param(new_params={name: item.name}, extras=extras, alternative_url=alternative_url) %}
+                      {% set label = label_function(item) if label_function else item.display_name %}
+                      {% set label_truncated = h.truncate(label, 22) if not label_function else label %}
+                      {% set count = count_label(item['count']) if count_label else ('(%d)' % item['count']) %}
+                      <li class="{% if item.active %} active{% endif %} list-group-item ckan-group-item">
+                        <a href="{{ href }}" title="{{ label if label != label else '' }}">
+                          {{ label }} {{ count }}
+                        </a>
+                      </li>
+                  {% endfor %}
 
-          {% endif %}
+                  {% if h.get_param_int('_%s_limit' % name) %}
+                    {% if h.has_more_facets(name) %}
+                      <li class="list-group-item ckan-group-item">
+                        <!-- <a href="{{ h.remove_url_param('_%s_limit' % name, replace=0, extras=extras, alternative_url=alternative_url) }}" class="read-more"><strong>{{ _('Show More {facet_type}').format(facet_type=title) }}</strong></a> -->
+                      </li>
+                    {% endif %}
+                  {% else %}
+                    <li class="list-group-item ckan-group-item">
+                      <!-- <a href="{{ h.remove_url_param('_%s_limit' % name, extras=extras, alternative_url=alternative_url) }}" class="read-more">{{ _('Show Only Popular {facet_type}').format(facet_type=title) }}</a> -->
+                    </li>
+                  {% endif %}
+                </ul>
+                </div>
+              {% else %}
+                <div class="list-group collapse" id="item-{{h.slugify_text(title)}}">
+                  <ul class="filters-menu">
+                    <!-- <li class="list-group-item ckan-group-item">{{ _('There are no {facet_type} that match this search').format(facet_type=title) }}</li> -->
+                  </ul>
+                </div>
+              {% endif %}
           {% endwith %}
           {% endblock %}
 

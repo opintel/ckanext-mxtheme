@@ -74,13 +74,6 @@ within_tertiary
                     </li>
                 {% endfor %}
 
-                {% if h.get_param_int('_%s_limit' % name) %}
-                 <p></p>
-                {% else %}
-                  <li class="list-group-item ckan-group-item">
-                    <a href="{{ h.remove_url_param('_%s_limit' % name, extras=extras, alternative_url=alternative_url) }}" class="read-more">{{ _('Show Only Popular {facet_type}').format(facet_type=title) }}</a>
-                  </li>
-                {% endif %}
               </ul>
               </div>
           {% else %}

@@ -75,13 +75,14 @@
   {% set licencias = 'Licencias' %}
   {% set categorias = 'Categorias' %}
 
+
   {{ h.snippet('snippets/facet_list.html', title='Categorias', name='theme') }}
   {{ h.snippet('snippets/facet_list.html', title='Nivel de Gobierno', name='vocab_gov_types') }}
   {{ h.snippet('snippets/facet_list.html', title='Organizaciones', name='organization') }}
   {{ h.snippet('snippets/facet_list.html', title='Grupos', name='groups') }}
   {{ h.snippet('snippets/facet_list.html', title='Etiquetas', name='tags') }}
   {{ h.snippet('snippets/facet_list.html', title='Formatos', name='res_format') }}
-  {{ h.snippet('snippets/facet_list.html', title='Licencias', name='license_id') }}
+  {{ h.snippet('snippets/facet_list.html', title='Categorias', name='theme') }}
 
   <a href="http://datamx.io" class="module-heading list-group-item ckan-group-item ckan-header-group">
     Datos Ciudadanos | datamx.io

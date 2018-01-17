@@ -73,6 +73,23 @@ within_tertiary
                       </a>
                     </li>
                 {% endfor %}
+
+                {% if h.get_param_int('_%s_limit' % name) %}
+                  {% if h.has_more_facets(name) %}
+                    <li class="list-group-item ckan-group-item">
+                      <a href="{{ h.remove_url_param('_%s_limit' % name, replace=0, extras=extras, alternative_url=alternative_url) }}" class="read-more"><strong>{{ _('Show More {facet_type}').format(facet_type=title) }}</strong></a>
+                    </li>
+                  {% endif %}
+                
+                {% endif %}
+              </ul>
+              </div>
+          {% else %}
+            <div class="list-group collapse" id="item-{{h.slugify_text(h.get_facet_title(name))}}">
+              <ul class="filters-menu">
+                <li class="list-group-item ckan-group-item">{{ _('There are no {facet_type} that match this search').format(facet_type=title) }}</li>
+              </ul>
+            </div>
           {% endif %}
           {% endwith %}
           {% endblock %}

@@ -75,15 +75,7 @@
   {% set licencias = 'Licencias' %}
   {% set categorias = 'Categorias' %}
 
-  {% for facet in c.facet_titles %}
-    {% if c.facet_titles[facet] != licencias %}
-      {% if c.facet_titles[facet] == categorias %}
-        {{ h.snippet('snippets/facet_list.html', title='Categorías', name=facet) }}
-      {% else %}
-        {{ h.snippet('snippets/facet_list.html', title=c.facet_titles[facet], name=facet) }}
-      {% endif %}
-    {% endif %}
-  {% endfor %}
+  {{ c.facet_titles }}
   <a href="http://datamx.io" class="module-heading list-group-item ckan-group-item ckan-header-group">
     Datos Ciudadanos | datamx.io
   </a>

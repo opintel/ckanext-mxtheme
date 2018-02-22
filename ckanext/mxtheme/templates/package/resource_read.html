@@ -37,7 +37,7 @@
   {% block resource %}
     <div id="content" class="col-md-12 no-border details">
         {% block resource_read_title %}
-            <h1>{{ h.resource_display_name(res) | truncate(150) }}</h1>
+            <h1>{{ h.resource_display_name(res) }}</h1>
         {% endblock %}
         {% block resource_read_url %}
             {% if res.url and h.is_url(res.url) %}
@@ -194,7 +194,8 @@
                             {% block resource_additional_information_inner %}
                             <div class="module-content">
                               <h2>{{ _('Additional Information') }}</h2>
-                              <table class="table table-striped table-bordered table-condensed">
+                              <div class="panel panel-default">
+                                <table class="table table-bordered">
                                 <thead>
                                   <tr>
                                     <th scope="col">{{ _('Field') }}</th>
@@ -228,7 +229,7 @@
                                   </tr>
                                   <tr>
                                     <th scope="row">{{ _('License') }}</th>
-                                    <td>{% snippet "snippets/license.html", pkg_dict=pkg, text_only=True %}</td>
+                                    <td>{% snippet "snippets/license-xs.html", pkg_dict=pkg, text_only=True %}</td>
                                   </tr>
                                   {% for key, value in h.format_resource_items(res.items()) %}
                                     {% if key != 'format' and key != 'size' and key != 'package id' and key != 'revision id' and key != 'id' and key != 'Creado' and key != 'resource group id' and key != 'Tamaño' and key != 'has views'%}
@@ -316,6 +317,7 @@
                                   {% endfor %}
                                 </tbody>
                               </table>
+                              </div>
                             </div>
                             {% endblock %}
                           </section>

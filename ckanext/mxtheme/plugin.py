@@ -4,8 +4,6 @@ import i18n
 import logging
 import datetime
 import urlparse
-##### STRING
-import string
 
 import ckan.exceptions
 import ckan.plugins as plugins
@@ -185,14 +183,6 @@ def get_cdn_url():
         cdn_url = 'https://cdn.datos.gob.mx/bower_components/'
     return cdn_url
 
-def get_clear_organization_name(name):
-    if (string.find(name, '-') > 0):
-        name = name.replace('-',' ');
-        name = name.title()
-    else:
-        name = name.upper()
-    return name
-
 def sorted_extras_dgm(extras):
     sorted_list = sorted_extras(extras)
     initial_peroid =final_period = None
@@ -248,6 +238,5 @@ class MxthemePlugin(plugins.SingletonPlugin):
             'get_adela_endpoint': get_adela_endpoint,
             'sorted_extras_dgm': sorted_extras_dgm,
             'get_grafica_base_url': get_grafica_base_url,
-            'get_cdn_url': get_cdn_url,
-            'get_clear_organization_name': get_clear_organization_name
+            'get_cdn_url': get_cdn_url
         }

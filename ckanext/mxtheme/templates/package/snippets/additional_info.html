@@ -3,7 +3,7 @@
   <table class="table table-bordered">
     <thead>
       <tr>
-        <th scope="col" width="50%">{{ _('Field') }}</th>
+        <th scope="col">{{ _('Field') }}</th>
         <th scope="col">{{ _('Value') }}</th>
       </tr>
     </thead>
@@ -11,7 +11,7 @@
       {% block package_additional_info %}
         {% if pkg_dict.url %}
           <tr>
-            <td scope="row" class="dataset-label">{{ _('Source') }}</td>
+            <th scope="row" class="dataset-label">{{ _('Source') }}</th>
             {% if h.is_url(pkg_dict.url) %}
               <td class="dataset-details" property="foaf:homepage">{{ h.link_to(pkg_dict.url, pkg_dict.url, rel='foaf:homepage', target='_blank') }}</td>
             {% else %}
@@ -22,38 +22,38 @@
 
         {% if pkg_dict.author_email %}
           <tr>
-            <td scope="row" class="dataset-label">{{ _("Author") }}</td>
+            <th scope="row" class="dataset-label">{{ _("Author") }}</th>
             <td class="dataset-details" property="dc:creator">{{ h.mail_to(email_address=pkg_dict.author_email, name=pkg_dict.author) }}</td>
           </tr>
         {% elif pkg_dict.author %}
           <tr>
-            <td scope="row" class="dataset-label">{{ _("Author") }}</td>
+            <th scope="row" class="dataset-label">{{ _("Author") }}</th>
             <td class="dataset-details" property="dc:creator">{{ pkg_dict.author }}</td>
           </tr>
         {% endif %}
 
         {% if pkg_dict.maintainer_email %}
           <tr>
-            <td scope="row" class="dataset-label">{{ _('Maintainer') }}</td>
+            <th scope="row" class="dataset-label">{{ _('Maintainer') }}</th>
             <td class="dataset-details" property="dc:contributor">{{ h.mail_to(email_address=pkg_dict.maintainer_email, name=pkg_dict.maintainer) }}</td>
           </tr>
         {% elif pkg_dict.maintainer %}
           <tr>
-            <td scope="row" class="dataset-label">{{ _('Maintainer') }}</td>
+            <th scope="row" class="dataset-label">{{ _('Maintainer') }}</th>
             <td class="dataset-details" property="dc:contributor">{{ pkg_dict.maintainer }}</td>
           </tr>
         {% endif %}
 
         {% if pkg_dict.version %}
           <tr>
-            <td scope="row" class="dataset-label">{{ _("Version") }}</td>
+            <th scope="row" class="dataset-label">{{ _("Version") }}</th>
             <td class="dataset-details">{{ pkg_dict.version }}</td>
           </tr>
         {% endif %}
 
         {% if h.check_access('package_update',{'id':pkg_dict.id}) %}
           <tr>
-            <td scope="row" class="dataset-label">{{ _("State") }}</td>
+            <th scope="row" class="dataset-label">{{ _("State") }}</th>
             <td class="dataset-details">
               {% if value == 'active' or 'Active' %}
                 Activo
@@ -69,7 +69,7 @@
           {% set key, value = extra %}
           {#{% if key != 'Final del periodo temporal' and key != 'Inicio del periodo temporal'%}#}
           <tr rel="dc:relation" resource="_:extra{{ i }}" style="{% if not value %}display: none;{% endif %}">
-            <td scope="row" class="dataset-label" property="rdfs:label">
+            <th scope="row" class="dataset-label" property="rdfs:label">
               {% if key == 'dataDictionary' %}
                 Diccionario de Datos
               {% elif key == 'quality' %}
@@ -95,7 +95,7 @@
               {% else %}
                 {{ _(key) }}
               {% endif %}
-            </td>
+            </th>
             <td class="dataset-details" property="rdf:value">
               {% if key == 'state' or key == 'State' or _(key) == 'Estado' %}
                 {% if value == 'active' or 'Active' %}

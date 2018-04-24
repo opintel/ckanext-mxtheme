@@ -9,7 +9,7 @@ Example:
   {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=pkg.resources %}
 
 #}
-  <p><strong>{{ _('Data and Resources') }}</p></strong>
+  <h3 class="third-section-title">{{ _('Data and Resources') }}</h3>
   <div id="datasets-list" class="container-fluid">
   {% block resource_list %}
     {% if resources %}      

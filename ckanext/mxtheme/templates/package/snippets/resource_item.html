@@ -13,12 +13,12 @@
   {% block resource_item_title %}
   <div class="col-md-8 col-sm-8 col-xs-10">
   <a class="heading" href="{{ url }}" title="{{ res.name or res.description }}">
-    <h4>{{ h.resource_display_name(res) | truncate(50) }}</h4>
+    <h4>{{ h.resource_display_name(res) }}</h4>
     {{ h.popular('views', res.tracking_summary.total, min=10) }}
   </a>
   <p class="description">
     {% if res.description %}
-      {{ h.markdown_extract(res.description, extract_length=80) }}
+      {{ h.markdown_extract(res.description, extract_length=150) }}
     {% endif %}
   </p>
   </div>

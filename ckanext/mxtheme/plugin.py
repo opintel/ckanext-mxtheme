@@ -6,7 +6,7 @@ import datetime
 import urlparse
 ##### STRING
 import string
-
+import unicodedata
 import ckan.exceptions
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
@@ -178,6 +178,13 @@ def get_grafica_base_url():
     url_grafica_base = os.environ.get("GRAFICA_BASE_URL", "https://cdn.datos.gob.mx/assets/css/main.css")
     return url_grafica_base
 
+def get_cdn_url():
+    is_prd = os.environ.get("IS_PRD", False)
+    cdn_url = 'https://cdn.datos.gob.mx/qa/bower_components/'
+    if is_prd:
+        cdn_url = 'https://cdn.datos.gob.mx/bower_components/'
+    return cdn_url
+
 def get_clear_organization_name(name):
     if (string.find(name, '-') > 0):
         name = name.replace('-',' ');
@@ -185,6 +192,20 @@ def get_clear_organization_name(name):
     else:
         name = name.upper()
     return name
+
+def no_accents(string):
+    s = ''.join((c for c in unicodedata.normalize('NFD',unicode(string)) if unicodedata.category(c) != 'Mn'))
+    return s.decode()
+
+def set_tag_icon(extras):
+    tag_name = 'tag-icon'
+    category = ''
+    for element in extras:
+        if element['key'] == 'theme':
+             category = no_accents(element['value']).lower().replace(' ','-')
+    if category != 'otros':
+        tag_name = tag_name + ' tag-' + category
+    return tag_name
 
 def sorted_extras_dgm(extras):
     sorted_list = sorted_extras(extras)
@@ -241,5 +262,7 @@ class MxthemePlugin(plugins.SingletonPlugin):
             'get_adela_endpoint': get_adela_endpoint,
             'sorted_extras_dgm': sorted_extras_dgm,
             'get_grafica_base_url': get_grafica_base_url,
-            'get_clear_organization_name': get_clear_organization_name
+            'get_cdn_url': get_cdn_url,
+            'get_clear_organization_name': get_clear_organization_name,
+            'set_tag_icon': set_tag_icon
         }

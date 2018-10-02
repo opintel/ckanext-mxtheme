@@ -26,7 +26,7 @@
 
 {% block extra_js %}
   <script type="text/javascript">
-    function registerDownload(event){
+    function registerDownload(downloadEvent){
       ga('send', { 'hitType': 'pageview', 'page': '/busca/organization/{{h.slugify_text(c.package.organization.name)}}/dataset/{{h.slugify_text(c.package.name)}}/resource/{{ h.slugify_text(h.resource_display_name(res)) }}/download', 'title': 'Download: {{ h.resource_display_name(res) | truncate(150) }}' });
       return true;
     }
@@ -56,45 +56,44 @@
         {% endif %}
 
       {% block data_preview %}
-      {% block resource_view %}
-
-        {% block resource_view_nav %}
-          {% set resource_preview = h.resource_preview(c.resource, c.package) %}
-          {% snippet "package/snippets/resource_views_list.html",
-             views=resource_views,
-             pkg=pkg,
-             is_edit=false,
-             view_id=current_resource_view['id'],
-             resource_preview=resource_preview,
-             resource=c.resource,
-             extra_class="nav-tabs-plain"
-           %}
-        {% endblock %}
-        {% block resource_view_content %}
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="preview">
-                {% set resource_preview = h.resource_preview(c.resource, c.package) %}
-                  {% set views_created = res.has_views or resource_preview %}
-                  {% if views_created %}
-                    {% if resource_preview and not current_resource_view %}
-                      {{ h.resource_preview(c.resource, c.package) }}
-                    {% else %}
-                      {% for resource_view in resource_views %}
-                        {% if resource_view == current_resource_view %}
-                          {% snippet 'package/snippets/resource_view.html',
-                             resource_view=resource_view,
-                             resource=c.resource,
-                             package=c.package
-                           %}
-                        {% endif %}
-                      {% endfor %}
-                    {% endif %}
-                  {% endif %}
-                </div>
-            </div>
+        {% block resource_view %}
+          {% block resource_view_nav %}
+            {% set resource_preview = h.resource_preview(c.resource, c.package) %}
+            {% snippet "package/snippets/resource_views_list.html",
+              views=resource_views,
+              pkg=pkg,
+              is_edit=false,
+              view_id=current_resource_view['id'],
+              resource_preview=resource_preview,
+              resource=c.resource,
+              extra_class="nav-tabs-plain"
+            %}
           {% endblock %}
-       {% endblock %}
-       {% endblock %}
+          {% block resource_view_content %}
+              <div class="tab-content">
+                  <div role="tabpanel" class="tab-pane active" id="preview">
+                  {% set resource_preview = h.resource_preview(c.resource, c.package) %}
+                    {% set views_created = res.has_views or resource_preview %}
+                    {% if views_created %}
+                      {% if resource_preview and not current_resource_view %}
+                        {{ h.resource_preview(c.resource, c.package) }}
+                      {% else %}
+                        {% for resource_view in resource_views %}
+                          {% if resource_view == current_resource_view %}
+                            {% snippet 'package/snippets/resource_view.html',
+                              resource_view=resource_view,
+                              resource=c.resource,
+                              package=c.package
+                            %}
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                    {% endif %}
+                  </div>
+              </div>
+          {% endblock %}
+        {% endblock %}
+      {% endblock %}
 
        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
        <script type="text/javascript">
@@ -102,7 +101,7 @@
            $('.tab-content').hide();
            $('.nav-tabs-plain').hide();
            var notFormatValid= $('.data-viewer-info');
-           if (notFormatValid.length == 0) {
+           if (notFormatValid.length === 0) {
              setTimeout(function(){
                var hide= $('.recline-data-explorer');
                if(hide.length > 0) {
@@ -122,7 +121,7 @@
 
                   xhr.open('GET', '{{h.get_adela_endpoint()}}/{{h.slugify_text(h.resource_display_name(res))}}', false);
                   xhr.onreadystatechange = function () {
-                      if (xhr.readyState===4 && xhr.status===200) {
+                      if (xhr.readyState === 4 && xhr.status === 200) {
                         var items = JSON.parse(xhr.responseText).distribution;
                         if(items.dataset){
                           document.getElementById('accrualPeriodicity').innerHTML = items.dataset.accrualPeriodicity;
@@ -130,7 +129,10 @@
                           $("#th_accrualPeriodicity").show();
                         }
                         if(items.temporal){
-                          document.getElementById('temporal').innerHTML = items.temporal;
+                          var dateArray = items.temporal.split('/');
+                          var init = dateArray[0].slice(0, 10);
+                          var end = dateArray[1].slice(0, 10);
+                          document.getElementById('temporal').innerHTML = 'De ' + init + ' a ' + end;
                           $(".temporal").show();
                           $("#th_temporal").show();
                         }
@@ -173,9 +175,50 @@
                   }
 
                   xhr.send();
-              });
+                  var resource_id = "{{res.id}}",
+                      api_datos_url = 'https://api.datos.gob.mx',
+                      api_geo_url = '{{h.get_api_endpoint()}}/ckan-geoserver',
+                      geo_url_wfs = "{{h.get_geoserver_endpoint()}}/ckan/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=application/json&typeName=",
+                      geo_url_wms = "{{h.get_geoserver_endpoint()}}/ckan/wms?service=WMS&version=1.1.0&request=GetMap&styles=&bbox=-117.773,14.987,-85.605,32.916&width=800&height=600&srs=EPSG:4326&format=image/png&layers=",
 
-              //$(document).ready( function () { xhr.send(); });
+                      var add_url_geo = function (resource) {
+                        var name_api = resource.geoserver;
+                        return '<a href="' + geo_url_wfs + resource.geoserver + '">' + name_api + '</a><br>';
+                      };
+                      var show_api_geo = function (url) {
+                        $("#spatial_url").html(url);
+                        $("#th_spatial_url").show();
+                        $(".spatial_url").show();
+                      };
+                      var show_api = function(api_url){
+                        $("#api_url").html('<a href="' + api_url + '">Consultar</a>');
+                        $("#th_api_url").show();
+                        $(".api_url").show();
+                      };
+                      var checkLengthGeo = function (length) {
+                        if(length > 8){
+                          $("#th_spatial_url").css("height", "200px");
+                        }
+                      };
+
+                  $.get(api_datos_url,{ 'resource-id': resource_id }, function(data){
+                    if(data.results.length > 0){
+                      var urlAPI = data.results[0].url;
+                      show_api(urlAPI);
+                    }
+                  });
+
+                  $.get(api_geo_url, { ckan: resource_id }, function (data) {
+                  if (data.results.length > 0) {
+                    var htmlUrls = '';
+                    checkLengthGeo(data.results.length);
+                    data.results.forEach(element => {
+                      htmlUrls = htmlUrls + add_url_geo(element);
+                    });
+                    show_api_geo(htmlUrls);
+                  }
+                });
+              });
            </script>
            <div id="additionals" class="row">
                 <div id="sidebar" class="col-md-3">
@@ -294,8 +337,16 @@
                                     <th id="th_spatial" scope="row">{{ _('Espacio geográfico') }}</th>
                                     <td id="spatial"></td>
                                   </tr>
+                                  <tr class="spatial_url" style="display: none;">
+                                    <th id="th_spatial_url" scope="row">{{ _('API geográfica') }}</th>
+                                    <td id="spatial_url"></td>
+                                  </tr>
+                                  <tr class="api_url" style="display: none;">
+                                    <th id="th_api_url" scope="row">{{ _('API') }}</th>
+                                    <td id="api_url"></td>
+                                  </tr>
                                   {% for key, value in h.format_resource_items(res.items()) %}
-                                    {% if key == 'package id' or key == 'revision id' or key == 'id' or key == 'resource group id' %}
+                                    {% if key == 'package id' or key == 'revision id' or key == 'id' or key == 'resource group id'%}
                                       <tr class="toggle-more">
                                         {# Esto no va a ser necesario cuando tengamos el idioma actualizado #}
                                         <th scope="row">
@@ -307,10 +358,16 @@
                                           Id
                                           {% elif key == 'resource group id' %}
                                           Id del Grupo de Recursos
+                                          {% else %}
+                                          {{_(key)}}
                                           {% endif %}
                                         </th>
                                         <td>
-                                          {{ _(value) }}
+                                          {% if key == "temporal_start" or key == "temporal_end" %}
+                                            {{ h.get_human_date(value) }}
+                                          {% else %}
+                                            {{ _(value) }}
+                                          {% endif %}
                                         </td>
                                       </tr>
                                     {% endif %}

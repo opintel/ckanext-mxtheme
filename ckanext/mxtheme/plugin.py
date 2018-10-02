@@ -41,9 +41,8 @@ def _add_i18n_to_url(url_to_amend, **kw):
     allowed_locales = ['default']
     if locale and locale not in allowed_locales:
         locale = None
-    if locale:
-        if locale == 'default':
-            default_locale = True
+    if locale == 'default':
+        default_locale = True
     else:
         try:
             locale = request.environ.get('CKAN_LANG')
@@ -173,6 +172,13 @@ def get_adela_endpoint():
     adela_endpoint = os.environ.get("ADELA_ENDPOINT", "http://10.20.55.7/adela/api/v1/distributions")
     return adela_endpoint
 
+def get_api_endpoint():
+    api_endpoint = os.environ.get("API_ENDPOINT", "http://10.20.55.7/v2/api/buda")
+    return api_endpoint
+
+def get_geoserver_endpoint():
+    geoserver_endpoint = os.environ.get("GEOSERVER_ENDPOINT", "https://geo.datos.gob.mx/geoserver")
+    return geoserver_endpoint
 
 def get_grafica_base_url():
     url_grafica_base = os.environ.get("GRAFICA_BASE_URL", "https://cdn.datos.gob.mx/assets/css/main.css")
@@ -226,6 +232,14 @@ def sorted_extras_dgm(extras):
     return sorted_list
 
 
+def get_human_date(date):
+    try:
+        #2000 - 01 - 01T00: 00: 00Z
+        return datetime.datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ").strftime("%Y-%m-%d")
+    except Exception:
+        return date
+
+
 class MxthemePlugin(plugins.SingletonPlugin):
     """
     Tema para branding de datos.gob.mx
@@ -260,9 +274,12 @@ class MxthemePlugin(plugins.SingletonPlugin):
             '_add_i18n_to_url': _add_i18n_to_url,
             'slugify_text': slugify_name,
             'get_adela_endpoint': get_adela_endpoint,
+            'get_api_endpoint': get_api_endpoint,
+            'get_geoserver_endpoint': get_geoserver_endpoint,
             'sorted_extras_dgm': sorted_extras_dgm,
             'get_grafica_base_url': get_grafica_base_url,
             'get_cdn_url': get_cdn_url,
             'get_clear_organization_name': get_clear_organization_name,
-            'set_tag_icon': set_tag_icon
+            'set_tag_icon': set_tag_icon,
+            'get_human_date': get_human_date
         }
